@@ -4,8 +4,9 @@ import sys
 
 import arcpy
 
-from modules.folder_utils import create_folders_for_field_values
+from modules.folder_utils import create_folders_for_field_values, create_subfolders
 from modules.export_utils import export_by_field_values, get_unique_values
+from modules.file_utils import copy_files_to_folders
 from modules.gdb_utils import create_gdb, copy_shapefile, add_fields_if_not_exist, re_project_feature_class, \
     calculate_grid_convergence_angle
 
@@ -39,19 +40,31 @@ def prepare_data():
     calculate_grid_convergence_angle(output_fc, output_field="angle")
 
 
-def export_file_by_nomenclature():
+def create_export_folders():
     input_fc = os.path.join(config.get_output_gdb(), "frame")
     output_base_folder = config.get_output_folder()
     field_name = config.EXPORT_FIELD
-    subfolder_name = config.EXPORT_SUBFOLDER
 
     unique_values = get_unique_values(input_fc, field_name)
+    folders_dict = create_folders_for_field_values(output_base_folder, unique_values)
+    return folders_dict
 
-    folders_dict = create_folders_for_field_values(output_base_folder, unique_values, subfolder_name)
+
+def extract_shapefiles(folders_dict):
+    input_fc = os.path.join(config.get_output_gdb(), "frame")
+    field_name = config.EXPORT_FIELD
 
     export_by_field_values(input_fc, field_name, folders_dict)
 
 
+def copy_mxd_files(folders_dict):
+    template_path = config.get_template_mxd_path()
+    copy_files_to_folders(template_path, folders_dict)
+
+
 if __name__ == "__main__":
     prepare_data()
-    export_file_by_nomenclature()
+    folders = create_export_folders()
+    shp_folders = create_subfolders(folders, config.INPUT_SHAPEFILE_NAME)
+    extract_shapefiles(shp_folders)
+    copy_mxd_files(folders)
