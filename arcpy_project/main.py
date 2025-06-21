@@ -4,6 +4,7 @@ import sys
 
 import arcpy
 
+from modules.grids_utils import generate_grids
 from modules.field_utils import get_unique_values
 from modules.filesystem_utils import create_folders_for_field_values
 from modules.export_utils import extract_by_field_values_to_gdb
@@ -55,7 +56,7 @@ def extract_frames_to_gdb(folders_dict):
     input_fc = os.path.join(config.get_output_gdb(), "frame_work")
     field_name = config.EXPORT_FIELD
 
-    extract_by_field_values_to_gdb(input_fc, field_name, folders_dict, gdb_name="frame.gdb", dataset_name="",
+    extract_by_field_values_to_gdb(input_fc, field_name, folders_dict, gdb_name="frame.gdb", dataset_name="Frame",
                                    out_name_pattern="INP_frame")
 
 
@@ -64,10 +65,24 @@ def copy_mxd_files(folders_dict):
     copy_files_to_folders(template_path, folders_dict)
 
 
+def generate_all_grids(data_set_paths):
+    xml_template = config.get_template_xml_path()
+
+    generate_grids(
+        dataset_paths=data_set_paths,
+        xml_template_path=xml_template,
+        gdb_name=None,
+        dataset_name=None,
+        input_fc_name="INP_frame",
+        grid_prefix="Grid_"
+    )
+
+
 if __name__ == "__main__":
     prepare_data()
     folders = create_export_folders()
     gdb_paths = create_gdbs_in_folders(folders)
     dataset_paths = create_feature_datasets(gdb_paths)
     extract_frames_to_gdb(folders)
+    generate_all_grids(dataset_paths)
     copy_mxd_files(folders)

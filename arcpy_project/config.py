@@ -4,12 +4,14 @@ import os
 BASE_WORK_FOLDER = r"D:\Work\GIS\Frames"
 INPUT_FOLDER = r"!!!-IN"
 OUTPUT_FOLDER = r"!!!-OUT"
-TEMPLATE_MXD_NAME = "template.mxd"
+FRAME_TEMPLATE_FOLDER = "ShablonFrame"
+
 ITERATION = "2_iteration"
-
 INPUT_SHAPEFILE_NAME = "Рамки_2черга_region.shp"
-GDB_NAME = "NewWorkspace.gdb"
+TEMPLATE_MXD_NAME = "template.mxd"
+FRAME_TEMPLATE_NAME = "Frame 10 000 Ukraine 2000 Zona 7_SID 2025.xml"
 
+GDB_NAME = "NewWorkspace.gdb"
 EXPORT_FIELD = "NOMENCL"
 SHAPE_SUBFOLDER = "shp"
 
@@ -28,3 +30,7 @@ def get_output_folder():
 
 def get_output_gdb():
     return os.path.join(get_output_folder(), GDB_NAME)
+
+
+def get_template_xml_path():
+    return os.path.join(BASE_WORK_FOLDER, FRAME_TEMPLATE_FOLDER, FRAME_TEMPLATE_NAME)
