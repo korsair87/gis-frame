@@ -4,8 +4,9 @@ import sys
 
 import arcpy
 
-from modules.folder_utils import create_folders_for_field_values, create_subfolders
-from modules.export_utils import export_by_field_values, get_unique_values
+from modules.field_utils import get_unique_values
+from modules.filesystem_utils import create_folders_for_field_values, create_subfolders
+from modules.export_utils import export_by_field_values
 from modules.file_utils import copy_files_to_folders
 from modules.gdb_utils import create_gdb, copy_shapefile, add_fields_if_not_exist, re_project_feature_class, \
     calculate_grid_convergence_angle
@@ -65,6 +66,6 @@ def copy_mxd_files(folders_dict):
 if __name__ == "__main__":
     prepare_data()
     folders = create_export_folders()
-    shp_folders = create_subfolders(folders, config.INPUT_SHAPEFILE_NAME)
+    shp_folders = create_subfolders(folders, config.SHAPE_SUBFOLDER)
     extract_shapefiles(shp_folders)
     copy_mxd_files(folders)

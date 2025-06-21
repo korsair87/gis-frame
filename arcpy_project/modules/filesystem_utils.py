@@ -1,5 +1,10 @@
-# coding=utf-8
 import os
+
+
+def safe_shapefile_name(name):
+    if not name:
+        return "noname"
+    return name.replace("-", "_").strip()
 
 
 def create_folders_for_field_values(base_folder, values_list):
@@ -14,10 +19,9 @@ def create_folders_for_field_values(base_folder, values_list):
 
 def create_subfolders(folders_dict, subfolder_name):
     subfolders = {}
-    for val, folder_path in folders_dict.items():
-        subfolder_path = os.path.join(folder_path, subfolder_name)
-        if not os.path.exists(subfolder_path):
-            os.makedirs(subfolder_path)
-        subfolders[val] = subfolder_path
+    for val, base_path in folders_dict.items():
+        sub_path = os.path.join(base_path, subfolder_name)
+        if not os.path.exists(sub_path):
+            os.makedirs(sub_path)
+        subfolders[val] = sub_path
     return subfolders
-
