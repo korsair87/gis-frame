@@ -41,5 +41,13 @@ def add_fields_if_not_exist(feature_class, fields_to_add):
             arcpy.AddMessage("Field '{}' already exists. Skipping.".format(field_name))
 
 
-
-
+def calculate_grid_convergence_angle(feature_class, output_field="angle",
+                                     coordinate_system="GEOGRAPHIC", method="NONE"):
+    arcpy.AddMessage("Calculating grid convergence angle for '{}'...".format(feature_class))
+    arcpy.CalculateGridConvergenceAngle_cartography(
+        feature_class,
+        output_field,
+        coordinate_system,
+        method
+    )
+    arcpy.AddMessage("Calculation completed.")
