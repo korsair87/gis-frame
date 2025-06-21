@@ -4,10 +4,13 @@ import os
 BASE_WORK_FOLDER = r"D:\Work\GIS\Frames"
 INPUT_FOLDER = r"!!!-IN"
 OUTPUT_FOLDER = r"!!!-OUT"
-ITERATION = "2iteration"
+ITERATION = "2_iteration"
 
 INPUT_SHAPEFILE_NAME = "Рамки_2черга_region.shp"
 GDB_NAME = "NewWorkspace.gdb"
+
+EXPORT_FIELD = "NOMENCL"
+EXPORT_SUBFOLDER = "shp"
 
 
 def get_input_path():

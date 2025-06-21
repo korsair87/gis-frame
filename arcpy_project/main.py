@@ -4,6 +4,7 @@ import sys
 
 import arcpy
 
+from modules.export_utils import export_by_nomencl
 from modules.gdb_utils import create_gdb, copy_shapefile, add_fields_if_not_exist, re_project_feature_class, \
     calculate_grid_convergence_angle
 
@@ -37,5 +38,20 @@ def prepare_data():
     calculate_grid_convergence_angle(output_fc, output_field="angle")
 
 
+def export_grids_by_field():
+    from config import EXPORT_FIELD, EXPORT_SUBFOLDER
+    from config import get_output_folder, get_output_gdb
+
+    output_fc = os.path.join(get_output_gdb(), "frame")
+
+    export_by_nomencl(
+        input_fc=output_fc,
+        output_base_folder=get_output_folder(),
+        field_name=EXPORT_FIELD,
+        subfolder_name=EXPORT_SUBFOLDER
+    )
+
+
 if __name__ == "__main__":
     prepare_data()
+    export_grids_by_field()
