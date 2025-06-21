@@ -5,11 +5,11 @@ import sys
 import arcpy
 
 from modules.field_utils import get_unique_values
-from modules.filesystem_utils import create_folders_for_field_values, create_subfolders
-from modules.export_utils import export_by_field_values
+from modules.filesystem_utils import create_folders_for_field_values
+from modules.export_utils import extract_by_field_values_to_gdb
 from modules.file_utils import copy_files_to_folders
 from modules.gdb_utils import create_gdb, copy_shapefile, add_fields_if_not_exist, re_project_feature_class, \
-    calculate_grid_convergence_angle
+    calculate_grid_convergence_angle, create_gdbs_in_folders, create_feature_datasets
 
 import config
 
@@ -27,7 +27,7 @@ def prepare_data():
     new_gdb = create_gdb(new_gdb_folder, config.GDB_NAME)
 
     intermediate_fc = os.path.join(new_gdb, "frame_region_original")
-    output_fc = os.path.join(new_gdb, "frame")
+    output_fc = os.path.join(new_gdb, "frame_work")
 
     copy_shapefile(input_shp, intermediate_fc)
 
@@ -42,7 +42,7 @@ def prepare_data():
 
 
 def create_export_folders():
-    input_fc = os.path.join(config.get_output_gdb(), "frame")
+    input_fc = os.path.join(config.get_output_gdb(), "frame_work")
     output_base_folder = config.get_output_folder()
     field_name = config.EXPORT_FIELD
 
@@ -51,11 +51,12 @@ def create_export_folders():
     return folders_dict
 
 
-def extract_shapefiles(folders_dict):
-    input_fc = os.path.join(config.get_output_gdb(), "frame")
+def extract_frames_to_gdb(folders_dict):
+    input_fc = os.path.join(config.get_output_gdb(), "frame_work")
     field_name = config.EXPORT_FIELD
 
-    export_by_field_values(input_fc, field_name, folders_dict)
+    extract_by_field_values_to_gdb(input_fc, field_name, folders_dict, gdb_name="frame.gdb", dataset_name="",
+                                   out_name_pattern="INP_frame")
 
 
 def copy_mxd_files(folders_dict):
@@ -66,6 +67,7 @@ def copy_mxd_files(folders_dict):
 if __name__ == "__main__":
     prepare_data()
     folders = create_export_folders()
-    shp_folders = create_subfolders(folders, config.SHAPE_SUBFOLDER)
-    extract_shapefiles(shp_folders)
+    gdb_paths = create_gdbs_in_folders(folders)
+    dataset_paths = create_feature_datasets(gdb_paths)
+    extract_frames_to_gdb(folders)
     copy_mxd_files(folders)

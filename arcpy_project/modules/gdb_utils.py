@@ -1,3 +1,4 @@
+# coding=utf-8
 import arcpy
 import os
 
@@ -51,3 +52,38 @@ def calculate_grid_convergence_angle(feature_class, output_field="angle",
         method
     )
     arcpy.AddMessage("Calculation completed.")
+
+
+def create_gdbs_in_folders(folders_dict, gdb_name="frame.gdb"):
+    gdb_paths = {}
+
+    for key, folder_path in folders_dict.items():
+        gdb_path = os.path.join(folder_path, gdb_name)
+
+        if not arcpy.Exists(gdb_path):
+            arcpy.CreateFileGDB_management(folder_path, gdb_name)
+            arcpy.AddMessage("Created GDB at: {}".format(gdb_path))
+        else:
+            arcpy.AddMessage("GDB already exists: {}".format(gdb_path))
+
+        gdb_paths[key] = gdb_path
+
+    return gdb_paths
+
+
+def create_feature_datasets(gdb_paths, dataset_name="Frame", sr_code=5565):
+    sr = arcpy.SpatialReference(sr_code)
+    dataset_paths = {}
+
+    for key, gdb_path in gdb_paths.items():
+        dataset_path = os.path.join(gdb_path, dataset_name)
+
+        if not arcpy.Exists(dataset_path):
+            arcpy.CreateFeatureDataset_management(gdb_path, dataset_name, sr)
+            arcpy.AddMessage("Created Feature Dataset: {}".format(dataset_path))
+        else:
+            arcpy.AddMessage("Feature Dataset already exists: {}".format(dataset_path))
+
+        dataset_paths[key] = dataset_path
+
+    return dataset_paths
