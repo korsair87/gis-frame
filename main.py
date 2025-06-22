@@ -57,7 +57,7 @@ def extract_frames_to_gdb(folders_dict):
     field_name = config.EXPORT_FIELD
 
     extract_by_field_values_to_gdb(input_fc, field_name, folders_dict, gdb_name="frame.gdb", dataset_name="Frame",
-                                   out_name_pattern="INP_frame")
+                                   out_name_pattern="INP_Frame")
 
 
 def copy_mxd_files(folders_dict):
@@ -73,7 +73,7 @@ def generate_all_grids(data_set_paths):
         xml_template_path=xml_template,
         gdb_name=None,
         dataset_name=None,
-        input_fc_name="INP_frame",
+        input_fc_name="INP_Frame",
         grid_prefix="Grid_"
     )
 

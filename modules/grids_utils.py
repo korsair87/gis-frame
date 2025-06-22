@@ -7,7 +7,7 @@ from filesystem_utils import safe_shapefile_name
 
 
 def generate_grids(dataset_paths, xml_template_path, gdb_name=None, dataset_name=None,
-                   input_fc_name="INP_frame",
+                   input_fc_name="INP_Frame",
                    grid_prefix="Grid_"):
     for nomencl, path in dataset_paths.items():
         if gdb_name and dataset_name:
