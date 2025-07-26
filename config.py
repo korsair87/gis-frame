@@ -6,9 +6,10 @@ INPUT_FOLDER = r"!!!-IN"
 OUTPUT_FOLDER = r"!!!-OUT"
 FRAME_TEMPLATE_FOLDER = "ShablonFrame"
 
-ITERATION = "2_iteration"
-INPUT_SHAPEFILE_NAME = "Рамки_2черга_region.shp"
+ITERATION = "3_iteration"
+INPUT_SHAPEFILE_NAME = "Рамки_3черга_region.shp"
 TEMPLATE_MXD_NAME = "template.mxd"
+OUT_SPATIAL_REFERENCE = 5565  # Ukraine_2000_GK_Zone_7
 FRAME_TEMPLATE_NAME = "Frame 10 000 Ukraine 2000 Zona 7_SID 2025.xml"
 
 GDB_NAME = "NewWorkspace.gdb"

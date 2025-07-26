@@ -33,7 +33,7 @@ def prepare_data():
     copy_shapefile(input_shp, intermediate_fc)
 
     sr_in = arcpy.SpatialReference(4284)  # Pulkovo 1942
-    sr_out = arcpy.SpatialReference(5565)  # Ukraine_2000_GK_Zone_7
+    sr_out = arcpy.SpatialReference(config.OUT_SPATIAL_REFERENCE)
     re_project_feature_class(intermediate_fc, output_fc, sr_out, sr_in)
 
     fields = [("angle", "DOUBLE"), ("nomenclature", "TEXT")]
