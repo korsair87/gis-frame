@@ -82,7 +82,7 @@ if __name__ == "__main__":
     prepare_data()
     folders = create_export_folders()
     gdb_paths = create_gdbs_in_folders(folders)
-    dataset_paths = create_feature_datasets(gdb_paths)
+    dataset_paths = create_feature_datasets(gdb_paths, sr_code=config.OUT_SPATIAL_REFERENCE)
     extract_frames_to_gdb(folders)
     generate_all_grids(dataset_paths)
     copy_mxd_files(folders)
