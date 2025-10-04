@@ -1,30 +1,37 @@
 # coding=utf-8
 import arcpy
 import os
+from logger_config import setup_logger
+
+logger = setup_logger("gdb_utils")
 
 
 def create_gdb(parent_folder, gdb_name):
     new_gdb = os.path.join(parent_folder, gdb_name)
     if not arcpy.Exists(new_gdb):
+        logger.debug("Creating geodatabase: %s", new_gdb)
         arcpy.CreateFileGDB_management(parent_folder, gdb_name)
+    else:
+        logger.debug("Geodatabase already exists: %s", new_gdb)
     return new_gdb
 
 
 def copy_shapefile(input_shp, output_fc):
     if arcpy.Exists(output_fc):
-        arcpy.AddMessage("Output feature class exists. Deleting...")
+        logger.debug("Output feature class exists. Deleting: %s", output_fc)
         arcpy.Delete_management(output_fc)
 
-    arcpy.AddMessage("Copying shapefile...")
+    logger.debug("Copying shapefile from: %s to: %s", input_shp, output_fc)
     arcpy.CopyFeatures_management(input_shp, output_fc)
 
 
 def re_project_feature_class(input_fc, output_fc, spatial_ref_out, spatial_ref_in=None, geographic_transform=""):
     if arcpy.Exists(output_fc):
-        arcpy.AddMessage("Output feature class exists. Deleting...")
+        logger.debug("Output feature class exists. Deleting: %s", output_fc)
         arcpy.Delete_management(output_fc)
 
-    arcpy.AddMessage("Projecting feature class...")
+    logger.debug("Reprojecting from: %s to: %s", input_fc, output_fc)
+    logger.debug("Target spatial reference: %s", spatial_ref_out.factoryCode)
     if spatial_ref_in:
         arcpy.Project_management(input_fc, output_fc, spatial_ref_out, geographic_transform, spatial_ref_in)
     else:
@@ -36,25 +43,27 @@ def add_fields_if_not_exist(feature_class, fields_to_add):
 
     for field_name, field_type in fields_to_add:
         if field_name not in existing_fields:
-            arcpy.AddMessage("Adding field: {} ({})".format(field_name, field_type))
+            logger.debug("Adding field: %s (%s) to %s", field_name, field_type, feature_class)
             arcpy.AddField_management(feature_class, field_name, field_type)
         else:
-            arcpy.AddMessage("Field '{}' already exists. Skipping.".format(field_name))
+            logger.debug("Field '%s' already exists in %s. Skipping.", field_name, feature_class)
 
 
 def calculate_grid_convergence_angle(feature_class, output_field="angle",
                                      coordinate_system="GEOGRAPHIC", method="NONE"):
-    arcpy.AddMessage("Calculating grid convergence angle for '{}'...".format(feature_class))
+    logger.debug("Calculating grid convergence angle for: %s", feature_class)
+    logger.debug("Output field: %s, coordinate system: %s, method: %s",
+                output_field, coordinate_system, method)
     arcpy.CalculateGridConvergenceAngle_cartography(
         feature_class,
         output_field,
         coordinate_system,
         method
     )
-    arcpy.AddMessage("Calculation completed.")
 
 
 def create_gdbs_in_folders(folders_dict, gdb_name="frame.gdb"):
+    logger.debug("Creating geodatabases (%d items)", len(folders_dict))
     gdb_paths = {}
 
     for key, folder_path in folders_dict.items():
@@ -62,9 +71,9 @@ def create_gdbs_in_folders(folders_dict, gdb_name="frame.gdb"):
 
         if not arcpy.Exists(gdb_path):
             arcpy.CreateFileGDB_management(folder_path, gdb_name)
-            arcpy.AddMessage("Created GDB at: {}".format(gdb_path))
+            logger.debug("Created GDB at: %s", gdb_path)
         else:
-            arcpy.AddMessage("GDB already exists: {}".format(gdb_path))
+            logger.debug("GDB already exists: %s", gdb_path)
 
         gdb_paths[key] = gdb_path
 
@@ -72,6 +81,9 @@ def create_gdbs_in_folders(folders_dict, gdb_name="frame.gdb"):
 
 
 def create_feature_datasets(gdb_paths, dataset_name="Frame", sr_code=5565):
+    logger.debug("Creating feature datasets (%d items)", len(gdb_paths))
+    logger.debug("Dataset name: %s, spatial reference: %d", dataset_name, sr_code)
+
     sr = arcpy.SpatialReference(sr_code)
     dataset_paths = {}
 
@@ -80,9 +92,9 @@ def create_feature_datasets(gdb_paths, dataset_name="Frame", sr_code=5565):
 
         if not arcpy.Exists(dataset_path):
             arcpy.CreateFeatureDataset_management(gdb_path, dataset_name, sr)
-            arcpy.AddMessage("Created Feature Dataset: {}".format(dataset_path))
+            logger.debug("Created Feature Dataset: %s", dataset_path)
         else:
-            arcpy.AddMessage("Feature Dataset already exists: {}".format(dataset_path))
+            logger.debug("Feature Dataset already exists: %s", dataset_path)
 
         dataset_paths[key] = dataset_path
 

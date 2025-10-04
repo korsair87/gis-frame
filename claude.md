@@ -38,6 +38,22 @@ python main.py
 4. Generate coordinate grids
 5. Copy MXD templates
 
+## Logging
+The application uses a comprehensive logging system:
+- **Console output**: Simple format with timestamps for real-time monitoring
+- **File output**: Detailed logs with function names and line numbers in `logs/gis_frame_YYYYMMDD.log`
+- **UTF-8 encoding**: Full support for Cyrillic characters in data fields and file paths
+- **Logging guidelines**:
+  - All log messages must be in English for consistency and debugging
+  - Data containing Cyrillic characters (file paths, field values) is properly encoded
+  - Uses Python's built-in `logging` module (no additional dependencies)
+
+## Frame Range Processing
+Configure frame processing ranges in `config.py`:
+- `ENABLE_FRAME_RANGE = True/False` - Toggle range processing
+- `FRAME_START = 1` - Start frame number (1-based)
+- `FRAME_END = 10` - End frame number (inclusive)
+
 ## Notes
 - Uses legacy Python 2.7
 - Requires ArcGIS Desktop/ArcPy
