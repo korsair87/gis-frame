@@ -25,7 +25,7 @@ def generate_grids(dataset_paths, xml_template_path, gdb_name=None, dataset_name
         input_layer = os.path.join(feature_dataset, input_fc_name)
         out_feature_class = os.path.join(feature_dataset, "{}{}".format(grid_prefix, safe_shapefile_name(nomencl)))
 
-        logger.debug("Generating grid for nomenclature: %s", nomencl)
+        logger.info("Generating grid for nomenclature: %s", nomencl)
         logger.debug("Input layer: %s", input_layer)
         logger.debug("Output feature class: %s", out_feature_class)
 

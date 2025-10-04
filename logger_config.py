@@ -5,7 +5,7 @@ import sys
 from datetime import datetime
 
 
-def setup_logger(name="gis_frame", log_level=logging.INFO):
+def setup_logger(name="gis_frame", log_level=logging.DEBUG):
     """
     Setup logger with console and file output.
 
@@ -26,7 +26,7 @@ def setup_logger(name="gis_frame", log_level=logging.INFO):
 
     # Create formatters
     console_formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        '%(asctime)s | %(message)s',
         datefmt='%H:%M:%S'
     )
 

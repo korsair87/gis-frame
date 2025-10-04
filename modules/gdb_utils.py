@@ -71,7 +71,7 @@ def create_gdbs_in_folders(folders_dict, gdb_name="frame.gdb"):
 
         if not arcpy.Exists(gdb_path):
             arcpy.CreateFileGDB_management(folder_path, gdb_name)
-            logger.debug("Created GDB at: %s", gdb_path)
+            logger.info("Created GDB at: %s", gdb_path)
         else:
             logger.debug("GDB already exists: %s", gdb_path)
 
@@ -81,7 +81,7 @@ def create_gdbs_in_folders(folders_dict, gdb_name="frame.gdb"):
 
 
 def create_feature_datasets(gdb_paths, dataset_name="Frame", sr_code=5565):
-    logger.debug("Creating feature datasets (%d items)", len(gdb_paths))
+    logger.info("Creating feature datasets (%d items)", len(gdb_paths))
     logger.debug("Dataset name: %s, spatial reference: %d", dataset_name, sr_code)
 
     sr = arcpy.SpatialReference(sr_code)
