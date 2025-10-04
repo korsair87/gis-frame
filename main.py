@@ -5,7 +5,7 @@ import sys
 import arcpy
 
 from modules.grids_utils import generate_grids
-from modules.field_utils import get_unique_values
+from modules.field_utils import get_unique_values, get_unique_values_with_range
 from modules.filesystem_utils import create_folders_for_field_values
 from modules.export_utils import extract_by_field_values_to_gdb
 from modules.file_utils import copy_files_to_folders
@@ -47,7 +47,19 @@ def create_export_folders():
     output_base_folder = config.get_output_folder()
     field_name = config.EXPORT_FIELD
 
-    unique_values = get_unique_values(input_fc, field_name)
+    if config.ENABLE_FRAME_RANGE:
+        unique_values = get_unique_values_with_range(
+            input_fc, field_name,
+            config.FRAME_START,
+            config.FRAME_END
+        )
+        print("Processing frames {0}-{1} ({2} total frames)".format(
+            config.FRAME_START, config.FRAME_END, len(unique_values)
+        ))
+    else:
+        unique_values = get_unique_values(input_fc, field_name)
+        print("Processing all frames ({0} total frames)".format(len(unique_values)))
+
     folders_dict = create_folders_for_field_values(output_base_folder, unique_values)
     return folders_dict
 
