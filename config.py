@@ -16,6 +16,10 @@ GDB_NAME = "NewWorkspace.gdb"
 EXPORT_FIELD = "NOMENCL"
 SHAPE_SUBFOLDER = "shp"
 
+ENABLE_FRAME_RANGE = True
+FRAME_START = 1  # Start from frame number (1-based indexing)
+FRAME_END = 10   # End at frame number (inclusive)
+
 
 def get_input_path():
     return os.path.join(BASE_WORK_FOLDER, INPUT_FOLDER, ITERATION, INPUT_SHAPEFILE_NAME)
