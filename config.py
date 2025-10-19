@@ -20,6 +20,13 @@ ENABLE_FRAME_RANGE = True
 FRAME_START = 1  # Start from frame number (1-based indexing)
 FRAME_END = 10   # End at frame number (inclusive)
 
+# Geographic transformation settings for proper annotation rotation
+GEOGRAPHIC_TRANSFORMATION = "Pulkovo_1942_To_WGS_1984_2 + WGS_1984_To_Ukraine_2000_GK_CM_27E"
+
+# Grid convergence angle calculation settings
+GRID_CONVERGENCE_COORDINATE_SYSTEM = "PROJECTED"  # Use "PROJECTED" for Ukraine 2000 GK
+GRID_CONVERGENCE_METHOD = "ARITHMETIC_MEAN"  # Better accuracy for multiple features
+
 
 def get_input_path():
     return os.path.join(BASE_WORK_FOLDER, INPUT_FOLDER, ITERATION, INPUT_SHAPEFILE_NAME)

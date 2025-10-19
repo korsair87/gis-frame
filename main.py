@@ -40,12 +40,17 @@ def prepare_data():
 
     sr_in = arcpy.SpatialReference(4284)  # Pulkovo 1942
     sr_out = arcpy.SpatialReference(config.OUT_SPATIAL_REFERENCE)
-    re_project_feature_class(intermediate_fc, output_fc, sr_out, sr_in)
+    re_project_feature_class(intermediate_fc, output_fc, sr_out, sr_in, config.GEOGRAPHIC_TRANSFORMATION)
 
     fields = [("angle", "DOUBLE"), ("nomenclature", "TEXT")]
     add_fields_if_not_exist(output_fc, fields)
 
-    calculate_grid_convergence_angle(output_fc, output_field="angle")
+    calculate_grid_convergence_angle(
+        output_fc,
+        output_field="angle",
+        coordinate_system=config.GRID_CONVERGENCE_COORDINATE_SYSTEM,
+        method=config.GRID_CONVERGENCE_METHOD
+    )
     logger.info("Data preparation completed")
 
 
